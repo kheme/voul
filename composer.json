@@ -1,0 +1,37 @@
+{
+    "name": "voul",
+    "description": "voul is voucher pool micro-service based on PHP and developed by @kheme",
+    "keywords": ["kheme", "laravel", "lumen", "voul"],
+    "license": "MIT",
+    "type": "project",
+    "require": {
+        "php": ">=5.6.4",
+        "laravel/lumen-framework": "5.4.*",
+        "vlucas/phpdotenv": "~2.2",
+        "doctrine/dbal": "^2.5"
+    },
+    "require-dev": {
+        "fzaninotto/faker": "~1.4",
+        "phpunit/phpunit": "~5.0",
+        "mockery/mockery": "~0.9",
+        "squizlabs/php_codesniffer": "^3.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    },
+    "autoload-dev": {
+        "classmap": [
+            "tests/",
+            "database/"
+        ]
+    },
+    "scripts": {
+        "post-root-package-install": [
+            "php -r \"copy('.env.example', '.env');\""
+        ]
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
