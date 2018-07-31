@@ -18,29 +18,4 @@ class Voucher extends Model
         'voucher_used_date', 'voucher_code'
     ];
 
-    /**
-     * Return the model for the recipient who used this voucher
-     *
-     * @return model App/Recipient
-     */
-    public function recipient()
-    {
-        return $this->belongsTo(
-            'App\Recipient',
-            'recipient_id', 'voucher_recipient_id'
-        );
-    }
-
-    /**
-     * Return the model for the offer this voucher was used with
-     *
-     * @return model App/Offer
-     */
-    public function offer()
-    {
-        return $this->belongsTo(
-            'App\Offer',
-            'offer_id', 'voucher_offer_id'
-        );
-    }
 }

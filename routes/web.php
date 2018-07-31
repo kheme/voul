@@ -14,12 +14,13 @@
 $app->get('/', 'Controller@showHomePage');
 
 $app->post('offer', 'OfferController@createSpecialOffer');
-$app->get('offer/{key}', 'OfferController@viewSpecialOffer');
+$app->get('offer', 'OfferController@viewSpecialOffer');
 
 $app->post('recipient', 'RecipientController@createRecipient');
-$app->get('recipient', 'RecipientController@verifyRecipientByEmail');
-$app->get('recipient/{key}', 'RecipientController@viewRecipient');
+$app->get('recipient', 'RecipientController@viewRecipient');
+$app->get('recipient/verify', 'RecipientController@verifyRecipientByEmail');
 
 $app->post('voucher', 'VoucherController@createVoucherForEachRecipient');
-$app->get('voucher/verify', 'VoucherController@verifyVoucherWithCodeAndEmail');
-$app->get('voucher/{key}', 'VoucherController@viewVoucher');
+$app->get('voucher', 'VoucherController@viewVoucher');
+$app->get('voucher/redeem', 'VoucherController@matchVoucherCodeAndEmail');
+//$app->get('voucher/verify', 'VoucherController@verifyVoucherWithCode');

@@ -45,49 +45,51 @@ class RecipientController extends Controller
             if ($created_new_recipient) {
                 $message = ['recipient_id' => $created_new_recipient->recipient_id];
                 return
-                    $this->controller->displayMessage($message);
+                    $this->controller->displayMessage($message, true, 201);
             } else {
                 return
-                    $this->controller->displayMessage($this->error_message, false);
+                    $this->controller
+                    ->displayMessage($this->error_message, false, 400);
             }
         } catch (\Illuminate\Database\QueryException $e) {
             return
-                $this->controller->displayMessage($this->error_message, false);
+                $this->controller->displayMessage($this->error_message, false, 400);
         }
     }
 
     /**
      * View details of a Recipient
      * 
-     * @param int $key Primary key of the Recipient of interest
+     * @param request $request HTTP request
      *
      * @return json
      */
-    public function viewRecipient($key)
+    public function viewRecipient(request $request)
     {
         $json_message = 'invalid key';
+        $key          =  $request->key;
         $key         += 0; // make sure we have an integer here
-
+        
         if ($key == 0) {
             return
-                $this->controller->displayMessage($json_message, false);
+                $this->controller->displayMessage($json_message, false, 400);
         }
-
+        
         $found_recipient = Recipient::where('recipient_id', $key)
             ->selectRaw(
                 "recipient_id, recipient_name,
                 recipient_surname, recipient_email"
             )
             ->first();
-
+            return $this->controller->displayMessage($key, true, 200);
         if ($found_recipient) {
             $found_recipient = $found_recipient->toArray();
 
             return
-                $this->controller->displayMessage($found_recipient);
+                $this->controller->displayMessage($found_recipient, true, 200);
         } else {
             return
-                $this->controller->displayMessage($json_message, false);
+                $this->controller->displayMessage($json_message, false, 400);
         }
     }
 
@@ -102,7 +104,7 @@ class RecipientController extends Controller
     {
         $json_message = 'invalid email';
 
-        $recipient_email = $request->verify;
+        $recipient_email = $request->email;
 
         $found_recipient = Recipient::where('recipient_email', $recipient_email)
             ->join('voucher', 'voucher_recipient_id', 'recipient_id')
@@ -111,13 +113,19 @@ class RecipientController extends Controller
             ->get();
 
         if ($found_recipient) {
-            $found_recipient = $found_recipient->toArray();
+            $vouchers = $found_recipient->toArray();
 
             return
-                $this->controller->displayMessage($found_recipient);
+                response()->json(
+                    [
+                        'success'  => true,
+                        'vouchers' => $vouchers
+                    ],
+                    200
+                );
         } else {
             return
-                $this->controller->displayMessage($json_message, false);
+                $this->controller->displayMessage($json_message, false, 400);
         }
     }
 }

@@ -29,7 +29,7 @@ class OfferController extends Controller
     public function createSpecialOffer(request $request)
     {
         $offer_name     = $request->name;
-        $offer_discount = round(($request->discount / 100), 2);
+        $offer_discount = $request->discount;
 
         try {
             $created_new_offer = Offer::create(
@@ -43,32 +43,35 @@ class OfferController extends Controller
                 $message = ['offer_id' => $created_new_offer->offer_id];
 
                 return
-                    $this->controller->displayMessage($message);
+                    $this->controller->displayMessage($message, true, 201);
             } else {
                 return
-                    $this->controller->displayMessage($this->error_message, false);
+                    $this->controller
+                    ->displayMessage($this->error_message, false, 400);
             }
         } catch (\Illuminate\Database\QueryException $e) {
             return
-                $this->controller->displayMessage($this->error_message, false);
+                $this->controller
+                ->displayMessage($this->error_message, false, 400);
         }
     }
 
     /**
      * View details of a Special Offer
      * 
-     * @param int $key Primary key of the Special Offer of interest
+     * @param request $request HTTP request
      *
      * @return json
      */
-    public function viewSpecialOffer($key)
+    public function viewSpecialOffer(request $request)
     {
         $json_message = 'invalid key';
+        $key          =  $request->key;
         $key         += 0; // make sure we have an integer here
 
         if ($key == 0) {
             return
-                $this->controller->displayMessage($json_message, false);
+                $this->controller->displayMessage($json_message, false, 400);
         }
 
         $found_offer = Offer::where('offer_id', $key)
@@ -82,10 +85,10 @@ class OfferController extends Controller
             $found_offer = $found_offer->toArray();
 
             return
-                $this->controller->displayMessage($found_offer);
+                $this->controller->displayMessage($found_offer, true, 200);
         } else {
             return
-                $this->controller->displayMessage($json_message, false);
+                $this->controller->displayMessage($json_message, false, 400);
         }
     }
 }

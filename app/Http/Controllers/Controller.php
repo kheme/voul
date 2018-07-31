@@ -14,10 +14,8 @@ class Controller extends BaseController
      *
      * @return json
      */
-    public function displayMessage($message, $is_success = true)
+    public function displayMessage($message, $is_success, $code)
     {
-        $status_code = [true => 200, false => 400];
-
         $data['success'] = $is_success;
         
         if (isset($message)) {
@@ -28,7 +26,7 @@ class Controller extends BaseController
             }
         }
 
-        return response()->json($data, $status_code[$is_success]);
+        return response()->json($data, $code);
     }
 
     /**

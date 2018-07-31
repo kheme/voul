@@ -16,16 +16,4 @@ class Recipient extends Model
         'recipient_name', 'recipient_surname', 'recipient_email'
     ];
 
-    /**
-     * Return models of vouchers belonging to this user
-     *
-     * @return collection of App/Voucher models
-     */
-    public function vouchers()
-    {
-        return $this->hasMany(
-            'App\Voucher',
-            'recipient_id', 'voucher_recipient_id'
-        );
-    }
 }
