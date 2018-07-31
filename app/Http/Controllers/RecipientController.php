@@ -111,6 +111,10 @@ class RecipientController extends Controller
             ->join('offer', 'offer_id', 'voucher_offer_id')
             ->select('voucher_code', 'offer_name')
             ->get();
+        
+        if ($found_recipient->count() == 0) {
+            return $this->controller->displayMessage($json_message, false, 400);
+        }
 
         if ($found_recipient) {
             $vouchers = $found_recipient->toArray();
